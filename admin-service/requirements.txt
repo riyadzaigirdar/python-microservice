@@ -1,0 +1,11 @@
+django
+djangorestframework
+autopep8
+pylint
+mysql
+mysqlclient
+pymysql
+django-mysql
+pillow
+django-cors-headers
+pika

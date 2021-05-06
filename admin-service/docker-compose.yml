@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+    app:
+        container_name: admin-app
+        restart: always
+        build: .
+        command: >
+            sh -c "python manage.py migrate &&
+                   python manage.py runserver 0.0.0.0:8000"
+        ports:
+            - "8000:8000"
+        volumes:
+            - .:/app
+        environment:
+            - DB_NAME=admin_app
+            - DB_USER=riyad
+            - DB_PASSWORD=123456
+            - DB_HOST=django-db
+            - DB_PORT=3306  
+        depends_on:
+            - django-db
+    
+    consumer:
+        build: .
+        restart: always
+        command: >
+            sh -c "python consumer.py"
+        depends_on:
+            - django-db       
+
+    django-db:
+        image: mysql
+        container_name: mysql-admin-app
+        ports:
+            - "33066:3306"
+        volumes:
+            - ./db:/var/lib/mysql
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment:
+            - MYSQL_USER=riyad
+            - MYSQL_DATABASE=admin_app
+            - MYSQL_PASSWORD=123456
+            - MYSQL_ROOT_PASSWORD=123456
+                
+    
